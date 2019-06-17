@@ -1,10 +1,10 @@
 from setuptools import find_packages, setup
-from .api import __version__
+from .pycryptopro import __version__
 
 setup(
-    name='pycryptopro',
+    name='PyCryptoPro',
     version=__version__,
-    packages=find_packages(),
-    include_package_data=True,
-    zip_safe=False,
+    description='Python CryptoPro wrapper',
+    author='Alexey Buyanov',
+    author_email='alexbuyanow@gmail.com',
 )
