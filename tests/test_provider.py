@@ -18,8 +18,10 @@ class TestConsoleProvider(unittest.TestCase):
     """
 
     def setUp(self):
-        self.__cert_fixture = Path('./certificate_fixture.txt').read_text()
-        self.__crl_fixture = Path('./crl_fixture.txt').read_text()
+        self.__cert_fixture = Path(
+            './tests/certificate_fixture.txt'
+        ).read_text()
+        self.__crl_fixture = Path('./tests/crl_fixture.txt').read_text()
 
     def tearDown(self):
         del self.__crl_fixture
