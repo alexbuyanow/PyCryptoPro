@@ -1,5 +1,5 @@
-from setuptools import find_packages, setup
-from .pycryptopro import __version__
+from setuptools import setup
+from pycryptopro import __version__
 
 setup(
     name='PyCryptoPro',

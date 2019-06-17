@@ -15,5 +15,6 @@ __all__ = [
     'CRL',
     'CryptoProviderInterface',
     'ConsoleProvider',
-    'CryptoProException'
+    'CryptoProException',
+    '__version__'
 ]
