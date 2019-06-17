@@ -6,7 +6,7 @@ install:
   - pip install -r requirements-test.txt
   - pip install coveralls
 script:
-  - pylint pyfsm tests
+  - pylint pycryptopro tests
   - flake8 .
   - python -m unittest2 discover tests
   - coverage run --source=pycryptopro setup.py test
