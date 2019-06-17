@@ -1,0 +1,4 @@
+[MASTER]
+enable=all
+min-public-methods=1
+disable=too-many-arguments

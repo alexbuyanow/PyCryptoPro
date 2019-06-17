@@ -1,0 +1,79 @@
+=============================================================================
+1-------
+Issuer              : INN=007710474375, OGRN=1047702026701, E=dit@minsvyaz.ru, STREET=125375 г. Москва ул. Тверская д.7, O=Минкомсвязь России, L=Москва, S=77 г. Москва, C=RU, CN=УЦ 1 ИС ГУЦ
+Subject             : OGRN=1097746299353, INN=007707704692, STREET="ул. Кожевническая, д. 14, стр. 5", E=uc_info@roseltorg.ru, C=RU, S=77 Москва, L=Москва, O="АО ""ЕЭТП""", OU=Удостоверяющий центр, CN="АО ""ЕЭТП"""
+Serial              : 0x4DE522A4000300000815
+SHA1 Hash           : 19a2784dfc468bf50316c8d3c6646cd3be8b7da4
+SubjKeyID           : 5aac2b534b8d50306757bab8289886b755444e03
+Signature Algorithm : ГОСТ Р 34.11/34.10-2001
+PublicKey Algorithm : ГОСТ Р 34.10-2001 (512 bits)
+Not valid before    : 01/12/2016  17:15:00 UTC
+Not valid after     : 01/12/2026  17:25:00 UTC
+PrivateKey Link     : No
+CA cert URL         : http://rostelecom.ru/cdp/vguc1_4.crt
+CA cert URL         : http://reestr-pki.ru/cdp/vguc1_4.crt
+CDP                 : http://rostelecom.ru/cdp/vguc1_4.crl
+CDP                 : http://reestr-pki.ru/cdp/vguc1_4.crl
+2-------
+Issuer              : INN=007710474375, OGRN=1047702026701, E=dit@minsvyaz.ru, STREET=125375 г. Москва ул. Тверская д.7, O=Минкомсвязь России, L=Москва, S=77 г. Москва, C=RU, CN=УЦ 1 ИС ГУЦ
+Subject             : OGRN=1047707030513, INN=007707329152, STREET=ул. Неглинная д. 23, S=г. Москва, E=mns12705@nalog.ru, C=RU, L=Moscow, O=Federal Tax Service, CN=FNS Russia
+Serial              : 0x292B3E0D00020000062B
+SHA1 Hash           : f94ca87fc187732aeec75c57a825444764189f44
+SubjKeyID           : 0da4be6542fec3fa3988caabbab7b38ce19cf0b0
+Signature Algorithm : ГОСТ Р 34.11/34.10-2001
+PublicKey Algorithm : ГОСТ Р 34.10-2001 (512 bits)
+Not valid before    : 05/10/2015  09:02:00 UTC
+Not valid after     : 21/04/2019  11:15:00 UTC
+PrivateKey Link     : No
+CA cert URL         : http://rostelecom.ru/cdp/vguc1_3.crt
+CA cert URL         : http://reestr-pki.ru/cdp/vguc1_3.crt
+CDP                 : http://rostelecom.ru/cdp/vguc1_3.crl
+CDP                 : http://reestr-pki.ru/cdp/vguc1_3.crl
+3-------
+Issuer              : OGRN=1037700085444, INN=007717107991, C=RU, S=Moscow, L=Moscow, O="LLC ""Crypto-Pro""", CN=CryptoPro GOST Root CA
+Subject             : OGRN=1037700085444, INN=007717107991, C=RU, S=Moscow, L=Moscow, O="LLC ""Crypto-Pro""", CN=CryptoPro TLS CA
+Serial              : 0x3F6DB3009AA968954BF35DD4D287897B
+SHA1 Hash           : f6b88598ff04d18c8132cfb074d9fb051cec8a82
+SubjKeyID           : 5ed7a78b451f46fae96b8959023f640f146ef1d7
+Signature Algorithm : ГОСТ Р 34.11-2012/34.10-2012 256 бит
+PublicKey Algorithm : ГОСТ Р 34.10-2012 (512 bits)
+Not valid before    : 16/11/2018  10:43:17 UTC
+Not valid after     : 16/11/2028  10:43:17 UTC
+PrivateKey Link     : No
+CA cert URL         : http://cdp.cryptopro.ru/ra/aia/roottlsca.p7b
+CDP                 : http://cdp.cryptopro.ru/cdp/c2364dcc24260a439625305b67579b2ac9439cd5.crl
+CDP                 : http://tlsca.cryptopro.ru/cdp/c2364dcc24260a439625305b67579b2ac9439cd5.crl
+Extended Key Usage  : 1.3.6.1.5.5.8.2.2
+                      1.3.6.1.5.5.7.3.2
+                      1.3.6.1.5.5.7.3.1
+4-------
+Issuer              : INN=007710474375, OGRN=1047702026701, E=dit@minsvyaz.ru, STREET=125375 г. Москва ул. Тверская д.7, O=Минкомсвязь России, L=Москва, S=77 г. Москва, C=RU, CN=УЦ 1 ИС ГУЦ
+Subject             : OGRN=1037700085444, INN=007717107991, STREET=ул. Сущёвский вал д. 18, E=qca@cryptopro.ru, C=RU, S=г. Москва, L=Москва, O="ООО ""КРИПТО-ПРО""", CN="ООО ""КРИПТО-ПРО"""
+Serial              : 0x65B328B5000300000707
+SHA1 Hash           : d24b37fcfbb979d2d4a5d1549ec4e2029d15d8a2
+SubjKeyID           : 80b0a3c6e6bfbdb436475c37d62de7d26ddd921a
+Signature Algorithm : ГОСТ Р 34.11/34.10-2001
+PublicKey Algorithm : ГОСТ Р 34.10-2001 (512 bits)
+Not valid before    : 10/05/2016  12:56:00 UTC
+Not valid after     : 10/05/2026  13:06:00 UTC
+PrivateKey Link     : No
+CA cert URL         : http://rostelecom.ru/cdp/vguc1_4.crt
+CA cert URL         : http://reestr-pki.ru/cdp/vguc1_4.crt
+CDP                 : http://rostelecom.ru/cdp/vguc1_4.crl
+CDP                 : http://reestr-pki.ru/cdp/vguc1_4.crl
+5-------
+Issuer              : E=dit@minsvyaz.ru, C=RU, S=77 г. Москва, L=Москва, STREET="125375 г. Москва, ул. Тверская, д. 7", O=Минкомсвязь России, OGRN=1047702026701, INN=007710474375, CN=Головной удостоверяющий центр
+Subject             : INN=007710474375, OGRN=1047702026701, E=dit@minsvyaz.ru, STREET=125375 г. Москва ул. Тверская д.7, O=Минкомсвязь России, L=Москва, S=77 г.Москва, C=RU, CN=УЦ 2 ИС ГУЦ
+Serial              : 0x4589B63A000000000035
+SHA1 Hash           : b11108ffdcad99d7a845023ab552cb1abe845a1b
+SubjKeyID           : 0d09fa468ecf0bc95f924ea845ca990b59ade753
+Signature Algorithm : ГОСТ Р 34.11/34.10-2001
+PublicKey Algorithm : ГОСТ Р 34.10-2001 (512 bits)
+Not valid before    : 19/12/2014  00:07:45 UTC
+Not valid after     : 18/12/2018  00:07:45 UTC
+PrivateKey Link     : No
+CDP                 : http://rostelecom.ru/cdp/guc.crl
+CDP                 : http://reestr-pki.ru/cdp/guc.crl
+=============================================================================
+
+[ErrorCode: 0x00000000]
