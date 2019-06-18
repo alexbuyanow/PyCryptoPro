@@ -8,7 +8,7 @@ from __future__ import annotations
 from hashlib import md5
 from pathlib import Path
 from typing import List, Optional
-from .entity import Certificate, CRL
+from .entity import Certificate, CRL, Config
 from .exception import (
     CryptoProException,
     CryptoProviderException,
@@ -25,16 +25,13 @@ class CryptoProService:
     def __init__(
             self,
             data_provider: CryptoProviderInterface,
-            temp_path: str,
-            cert_store: str,
-            sign_store: str,
-            pin: str
+            config: Config
     ):
         self.__data_provider = data_provider
-        self.__temp_path = temp_path
-        self.__cert_store = cert_store
-        self.__sign_store = sign_store
-        self.__pin = pin
+        self.__temp_path = config.temp_path
+        self.__cert_store = config.storage_name
+        self.__sign_store = config.sign_storage_name
+        self.__pin = config.sign_storage_pin
 
     def get_certificate_list(self) -> List[Certificate]:
         """

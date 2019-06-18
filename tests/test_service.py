@@ -9,12 +9,21 @@ from datetime import datetime
 from typing import List
 import unittest2 as unittest
 import mock
-from pycryptopro.entity import Certificate, CRL, DATE_FORMAT
+from pycryptopro.entity import Certificate, CRL, Config, DATE_FORMAT
 from pycryptopro.service import (
     CryptoProService,
     CryptoProviderException,
     CryptoProException
 )
+
+CONFIG = {
+    'cert_manager_path': '',
+    'cryptocp_path': '',
+    'temp_path': '',
+    'storage_name': 'store',
+    'sign_storage_name': 'cert_store',
+    'sign_storage_pin': 'pin_code'
+}
 
 
 class TestCryptoProServiceCerts(unittest.TestCase):
@@ -29,7 +38,7 @@ class TestCryptoProServiceCerts(unittest.TestCase):
         """
         data = self.__cert_fixtures()
         provider.get_certificate_list.return_value = data
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         cert_list = service.get_certificate_list()
 
@@ -48,7 +57,7 @@ class TestCryptoProServiceCerts(unittest.TestCase):
             'code',
             'message'
         )
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         with self.assertRaisesRegex(
                 CryptoProException,
@@ -62,15 +71,17 @@ class TestCryptoProServiceCerts(unittest.TestCase):
         Tests certificate getting
         """
         cert_id = 'id'
-        store = 'cert_store'
         data = self.__cert_fixtures()[0]
         provider.get_certificate.return_value = data
-        service = CryptoProService(provider, '', store, '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         certificate = service.get_certificate(cert_id)
         self.assertIsInstance(certificate, Certificate)
         self.assertEqual(certificate, data)
-        provider.get_certificate.assert_called_once_with(cert_id, store)
+        provider.get_certificate.assert_called_once_with(
+            cert_id,
+            CONFIG['storage_name']
+        )
 
     @mock.patch('pycryptopro.CryptoProviderInterface')
     def test_get_certificate_error(self, provider):
@@ -81,7 +92,7 @@ class TestCryptoProServiceCerts(unittest.TestCase):
             'code',
             'message'
         )
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         with self.assertRaisesRegex(
                 CryptoProException,
@@ -97,12 +108,14 @@ class TestCryptoProServiceCerts(unittest.TestCase):
         Tests certificate adding
         """
         file = bytes('file', 'utf-8')
-        store = 'cert_store'
         provider.add_certificate = mock.Mock()
-        service = CryptoProService(provider, '', store, '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         service.add_certificate(file)
-        provider.add_certificate.assert_called_once_with(path(), store)
+        provider.add_certificate.assert_called_once_with(
+            path(),
+            CONFIG['storage_name']
+        )
 
     @mock.patch('pycryptopro.CryptoProviderInterface')
     def test_add_certificate_error(self, provider):
@@ -113,7 +126,7 @@ class TestCryptoProServiceCerts(unittest.TestCase):
             'code',
             'message'
         )
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         with mock.patch('pycryptopro.service.Path'):
             with self.assertRaisesRegex(
@@ -129,12 +142,14 @@ class TestCryptoProServiceCerts(unittest.TestCase):
         Tests certificate removing
         """
         cert_id = 'id'
-        store = 'cert_store'
         provider.remove_certificate = mock.Mock()
-        service = CryptoProService(provider, '', store, '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         service.remove_certificate(cert_id)
-        provider.remove_certificate.assert_called_once_with(cert_id, store)
+        provider.remove_certificate.assert_called_once_with(
+            cert_id,
+            CONFIG['storage_name']
+        )
 
     @mock.patch('pycryptopro.CryptoProviderInterface')
     def test_remove_certificate_error(self, provider):
@@ -145,7 +160,7 @@ class TestCryptoProServiceCerts(unittest.TestCase):
             'code',
             'message'
         )
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         with self.assertRaisesRegex(
                 CryptoProException,
@@ -160,7 +175,7 @@ class TestCryptoProServiceCerts(unittest.TestCase):
         """
         data = self.__crl_fixtures()
         provider.get_crl_list.return_value = data
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         cert_list = service.get_crl_list()
 
@@ -179,7 +194,7 @@ class TestCryptoProServiceCerts(unittest.TestCase):
             'code',
             'message'
         )
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         with self.assertRaisesRegex(
                 CryptoProException,
@@ -193,15 +208,17 @@ class TestCryptoProServiceCerts(unittest.TestCase):
         Tests CRL getting
         """
         cert_id = 'id'
-        store = 'cert_store'
         data = self.__crl_fixtures()[0]
         provider.get_crl.return_value = data
-        service = CryptoProService(provider, '', store, '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         crl = service.get_crl(cert_id)
         self.assertIsInstance(crl, CRL)
         self.assertEqual(crl, data)
-        provider.get_crl.assert_called_once_with(cert_id, store)
+        provider.get_crl.assert_called_once_with(
+            cert_id,
+            CONFIG['storage_name']
+        )
 
     @mock.patch('pycryptopro.CryptoProviderInterface')
     def test_get_crl_error(self, provider):
@@ -212,7 +229,7 @@ class TestCryptoProServiceCerts(unittest.TestCase):
             'code',
             'message'
         )
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         with self.assertRaisesRegex(
                 CryptoProException,
@@ -228,12 +245,14 @@ class TestCryptoProServiceCerts(unittest.TestCase):
         Tests CRL adding
         """
         file = bytes('file', 'utf-8')
-        store = 'cert_store'
         provider.add_crl = mock.Mock()
-        service = CryptoProService(provider, '', store, '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         service.add_crl(file)
-        provider.add_crl.assert_called_once_with(path(), store)
+        provider.add_crl.assert_called_once_with(
+            path(),
+            CONFIG['storage_name']
+        )
 
     @mock.patch('pycryptopro.CryptoProviderInterface')
     def test_add_crl_error(self, provider):
@@ -244,7 +263,7 @@ class TestCryptoProServiceCerts(unittest.TestCase):
             'code',
             'message'
         )
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         with mock.patch('pycryptopro.service.Path'):
             with self.assertRaisesRegex(
@@ -260,12 +279,14 @@ class TestCryptoProServiceCerts(unittest.TestCase):
         Tests CRL removing
         """
         cert_id = 'id'
-        store = 'cert_store'
         provider.remove_crl = mock.Mock()
-        service = CryptoProService(provider, '', store, '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         service.remove_crl(cert_id)
-        provider.remove_crl.assert_called_once_with(cert_id, store)
+        provider.remove_crl.assert_called_once_with(
+            cert_id,
+            CONFIG['storage_name']
+        )
 
     @mock.patch('pycryptopro.CryptoProviderInterface')
     def test_remove_crl_error(self, provider):
@@ -276,7 +297,7 @@ class TestCryptoProServiceCerts(unittest.TestCase):
             'code',
             'message'
         )
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         with self.assertRaisesRegex(
                 CryptoProException,
@@ -334,19 +355,17 @@ class TestCryptoProServiceSigns(unittest.TestCase):
         Tests signing with attached sign
         """
         file = bytes('file', 'utf-8')
-        store = 'cert_store'
-        pin = 'pin_code'
         sign_path.read_bytes.return_value = bytes('sign', 'utf-8')
         provider.sign_attached.return_value = sign_path
-        service = CryptoProService(provider, '', '', store, pin)
+        service = CryptoProService(provider, Config(CONFIG))
 
         sign = service.sign_attached(file)
 
         self.assertIsInstance(sign, bytes)
         provider.sign_attached.assert_called_once_with(
             sign_path(),
-            store,
-            pin,
+            CONFIG['sign_storage_name'],
+            CONFIG['sign_storage_pin'],
             False,
             False
         )
@@ -360,7 +379,7 @@ class TestCryptoProServiceSigns(unittest.TestCase):
             'code',
             'message'
         )
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config())
 
         with mock.patch('pycryptopro.service.Path'):
             with self.assertRaisesRegex(
@@ -376,19 +395,17 @@ class TestCryptoProServiceSigns(unittest.TestCase):
         Tests signing with detached sign
         """
         file = bytes('file', 'utf-8')
-        store = 'cert_store'
-        pin = 'pin_code'
         sign_path.read_bytes.return_value = bytes('sign', 'utf-8')
         provider.sign_detached.return_value = sign_path
-        service = CryptoProService(provider, '', '', store, pin)
+        service = CryptoProService(provider, Config(CONFIG))
 
         sign = service.sign_detached(file)
 
         self.assertIsInstance(sign, bytes)
         provider.sign_detached.assert_called_once_with(
             sign_path(),
-            store,
-            pin,
+            CONFIG['sign_storage_name'],
+            CONFIG['sign_storage_pin'],
             False,
             False
         )
@@ -402,7 +419,7 @@ class TestCryptoProServiceSigns(unittest.TestCase):
             'code',
             'message'
         )
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         with mock.patch('pycryptopro.service.Path'):
             with self.assertRaisesRegex(
@@ -419,7 +436,7 @@ class TestCryptoProServiceSigns(unittest.TestCase):
         """
         file = bytes('file', 'utf-8')
         provider.verify_attached = mock.Mock()
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config())
 
         self.assertTrue(service.verify_attached(file))
         provider.verify_attached.assert_called_once_with(path(), False, False)
@@ -433,7 +450,7 @@ class TestCryptoProServiceSigns(unittest.TestCase):
             'code',
             'message'
         )
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         with mock.patch('pycryptopro.service.Path'):
             with self.assertRaisesRegex(
@@ -451,7 +468,7 @@ class TestCryptoProServiceSigns(unittest.TestCase):
         file = bytes('file', 'utf-8')
         sign = bytes('sign', 'utf-8')
         provider.verify_detached = mock.Mock()
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         self.assertTrue(service.verify_detached(file, sign))
         provider.verify_detached.assert_called_once_with(
@@ -470,7 +487,7 @@ class TestCryptoProServiceSigns(unittest.TestCase):
             'code',
             'message'
         )
-        service = CryptoProService(provider, '', '', '', '')
+        service = CryptoProService(provider, Config(CONFIG))
 
         with mock.patch('pycryptopro.service.Path'):
             with self.assertRaisesRegex(

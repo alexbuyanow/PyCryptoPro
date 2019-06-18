@@ -9,7 +9,7 @@ from pathlib import Path
 import unittest2 as unittest
 import mock
 from pycryptopro.provider import ConsoleProvider
-from pycryptopro.entity import Certificate, CRL, Info, DATE_FORMAT
+from pycryptopro.entity import Certificate, CRL, Info, Config, DATE_FORMAT
 
 
 class TestConsoleProvider(unittest.TestCase):
@@ -33,7 +33,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests certificate list getting
         """
         wrapper.return_value.execute.return_value = self.__cert_fixture
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         result = provider.get_certificate_list('')
 
@@ -48,7 +48,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests empty certificate list getting
         """
         wrapper.return_value.execute.return_value = ''
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         result = provider.get_certificate_list('')
 
@@ -61,7 +61,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests certificate getting
         """
         wrapper.return_value.execute.return_value = self.__cert_fixture
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         certificate = provider.get_certificate('', '')
 
@@ -74,7 +74,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests absent certificate getting
         """
         wrapper.return_value.execute.return_value = ''
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         self.assertIsNone(provider.get_certificate('', ''))
         wrapper.return_value.execute.assert_called_once()
@@ -86,7 +86,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests certificate adding
         """
         wrapper.return_value.execute.return_value = ''
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         provider.add_certificate(Path(), '')
         wrapper.return_value.execute.assert_called_once()
@@ -98,7 +98,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests certificate removing
         """
         wrapper.return_value.execute.return_value = ''
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         provider.remove_certificate('', '')
         wrapper.return_value.execute.assert_called_once()
@@ -109,7 +109,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests CRL list getting
         """
         wrapper.return_value.execute.return_value = self.__crl_fixture
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         result = provider.get_crl_list('')
 
@@ -124,7 +124,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests empty CRL list getting
         """
         wrapper.return_value.execute.return_value = ''
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         result = provider.get_crl_list('')
 
@@ -137,7 +137,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests CRL getting
         """
         wrapper.return_value.execute.return_value = self.__crl_fixture
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         certificate = provider.get_crl('', '')
 
@@ -150,7 +150,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests absent CRL getting
         """
         wrapper.return_value.execute.return_value = ''
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         self.assertIsNone(provider.get_crl('', ''))
         wrapper.return_value.execute.assert_called_once()
@@ -162,7 +162,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests CRL adding
         """
         wrapper.return_value.execute.return_value = ''
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         provider.add_crl(Path(), '')
         wrapper.return_value.execute.assert_called_once()
@@ -174,7 +174,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests CRL removing
         """
         wrapper.return_value.execute.return_value = ''
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         provider.remove_crl('', '')
         wrapper.return_value.execute.assert_called_once()
@@ -186,7 +186,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests signing with attached sign
         """
         wrapper.return_value.execute.return_value = 'ErrorCode: 0x00000000'
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         provider.sign_attached(Path(), '', '')
         wrapper.return_value.execute.assert_called_once()
@@ -198,7 +198,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests signing with detached sign
         """
         wrapper.return_value.execute.return_value = 'ErrorCode: 0x00000000'
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         provider.sign_detached(Path(), '', '')
         wrapper.return_value.execute.assert_called_once()
@@ -210,7 +210,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests attached sign validation
         """
         wrapper.return_value.execute.return_value = 'ErrorCode: 0x00000000'
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         provider.verify_attached(Path(), Path())
         wrapper.return_value.execute.assert_called_once()
@@ -222,7 +222,7 @@ class TestConsoleProvider(unittest.TestCase):
         Tests detached sign validation
         """
         wrapper.return_value.execute.return_value = 'ErrorCode: 0x00000000'
-        provider = ConsoleProvider('', '', '')
+        provider = ConsoleProvider(Config())
 
         provider.verify_detached(Path(), Path())
         wrapper.return_value.execute.assert_called_once()

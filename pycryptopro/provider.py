@@ -9,7 +9,7 @@ from abc import abstractmethod, ABCMeta
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-from .entity import Certificate, CRL
+from .entity import Certificate, CRL, Config
 from .providers.console_provider import (
     ConsoleWrapper,
     CertManagerBuilder,
@@ -131,13 +131,11 @@ class ConsoleProvider(CryptoProviderInterface):
 
     def __init__(
             self,
-            cert_manager_path: str,
-            cryptocp_path: str,
-            temp_dir: str
+            config: Config
     ):
-        self.__cert_manager_path = cert_manager_path
-        self.__cryptocp_path = cryptocp_path
-        self.__temp_dir = temp_dir
+        self.__cert_manager_path = config.cert_manager_path
+        self.__cryptocp_path = config.cryptocp_path
+        self.__temp_dir = config.temp_path
         self.__wrapper = ConsoleWrapper()
 
     def get_certificate_list(self, store: str) -> List[Certificate]:

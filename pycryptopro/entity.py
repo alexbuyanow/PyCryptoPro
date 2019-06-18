@@ -192,3 +192,66 @@ class CRL:
         Gets next update date
         """
         return self.__next_update
+
+
+class Config:
+    """
+    Configuration
+    """
+
+    DEFAULT = {
+        'cert_manager_path': '/opt/cprocsp/bin/amd64/certmgr',
+        'cryptocp_path': '/opt/cprocsp/bin/amd64/cryptcp',
+        'temp_path': '/tmp',
+        'storage_name': 'ca',
+        'sign_storage_name': 'uMy',
+        'sign_storage_pin': '123'
+    }
+
+    def __init__(self, config: Dict[str, str] = None):
+        if not config:
+            config = {}
+
+        self.__config = {**self.DEFAULT, **config}
+
+    @property
+    def cert_manager_path(self) -> str:
+        """
+        Gets cert manager path
+        """
+        return self.__config['cert_manager_path']
+
+    @property
+    def cryptocp_path(self) -> str:
+        """
+        Gets crypto cp path
+        """
+        return self.__config['cryptocp_path']
+
+    @property
+    def temp_path(self) -> str:
+        """
+        Gets temporary path
+        """
+        return self.__config['temp_path']
+
+    @property
+    def storage_name(self) -> str:
+        """
+        Gets certificate storage name
+        """
+        return self.__config['storage_name']
+
+    @property
+    def sign_storage_name(self) -> str:
+        """
+        Gets signature storage name
+        """
+        return self.__config['sign_storage_name']
+
+    @property
+    def sign_storage_pin(self) -> str:
+        """
+        Gets signature storage PIN
+        """
+        return self.__config['sign_storage_pin']
