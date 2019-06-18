@@ -8,8 +8,56 @@ from datetime import datetime
 from pathlib import Path
 import unittest2 as unittest
 import mock
-from pycryptopro.provider import ConsoleProvider
+from pycryptopro.provider import (
+    CryptoProviderInterface,
+    ConsoleProvider,
+    CryptoProviderFactory
+)
 from pycryptopro.entity import Certificate, CRL, Info, Config, DATE_FORMAT
+from pycryptopro.exception import ProviderNotFoundException
+
+
+class TestCryptoProviderFactory(unittest.TestCase):
+    """
+    Providers factory tests
+    """
+
+    def setUp(self):
+        self.__factory = CryptoProviderFactory(Config())
+
+    def tearDown(self):
+        del self.__factory
+
+    def test_get_provider(self):
+        """
+        Tests provider getting
+        """
+        provider = self.__factory.get_provider('console')
+
+        self.assertIsInstance(provider, CryptoProviderInterface)
+        self.assertIsInstance(provider, ConsoleProvider)
+
+    def test_get_provider_error(self):
+        """
+        Tests absent provider getting
+        """
+        with self.assertRaisesRegex(
+                ProviderNotFoundException,
+                'Provider "undefined" not exists'
+        ):
+            self.__factory.get_provider('undefined')
+
+    @mock.patch('pycryptopro.provider.CryptoProviderInterface')
+    def test_add_provider(self, provider):
+        """
+        Tests provider adding
+        """
+        self.__factory.add_provider('test', provider)
+
+        self.assertEqual(
+            self.__factory.get_provider('test'),
+            provider
+        )
 
 
 class TestConsoleProvider(unittest.TestCase):
