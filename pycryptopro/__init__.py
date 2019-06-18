@@ -3,11 +3,11 @@
 """
 
 from .entity import Certificate, CRL, Config
-from .exception import CryptoProException
-from .provider import CryptoProviderInterface, ConsoleProvider
+from .exception import CryptoProException, ProviderNotFoundException
+from .provider import CryptoProviderInterface, CryptoProviderFactory
 from .service import CryptoProService
 
-__version__ = '0.0.2.dev0'
+__version__ = '0.0.3.dev0'
 
 __all__ = [
     'CryptoProService',
@@ -15,7 +15,8 @@ __all__ = [
     'CRL',
     'Config',
     'CryptoProviderInterface',
-    'ConsoleProvider',
+    'CryptoProviderFactory',
     'CryptoProException',
+    'ProviderNotFoundException',
     '__version__'
 ]

@@ -10,6 +10,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from .entity import Certificate, CRL, Config
+from .exception import ProviderNotFoundException
 from .providers.console_provider import (
     ConsoleWrapper,
     CertManagerBuilder,
@@ -122,6 +123,34 @@ class CryptoProviderInterface(metaclass=ABCMeta):
         """
         Verifies file with detached signature
         """
+
+
+class CryptoProviderFactory:
+    """
+    CryptoPro providers factory
+    """
+
+    __providers: Dict[str, CryptoProviderInterface] = {}
+
+    def __init__(self, config: Config):
+        self.add_provider('console', ConsoleProvider(config))
+
+    def get_provider(self, name: str) -> CryptoProviderInterface:
+        """
+        Gets CryptoPro provider by name
+        """
+        if name not in self.__providers:
+            message = 'Provider "{}" not exists'.format(name)
+
+            raise ProviderNotFoundException(message)
+
+        return self.__providers[name]
+
+    def add_provider(self, name: str, provider: CryptoProviderInterface):
+        """
+        Adds provider
+        """
+        self.__providers[name] = provider
 
 
 class ConsoleProvider(CryptoProviderInterface):

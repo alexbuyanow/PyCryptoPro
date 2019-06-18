@@ -33,3 +33,9 @@ class CryptoProException(Exception):
 
         self.code = code
         self.message = message
+
+
+class ProviderNotFoundException(Exception):
+    """
+    Undefined CryptoPro provider error
+    """

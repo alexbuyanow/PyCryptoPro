@@ -14,7 +14,7 @@ from .exception import (
     CryptoProviderException,
     ValidationFailedException
 )
-from .provider import CryptoProviderInterface
+from .provider import CryptoProviderFactory
 
 
 class CryptoProService:
@@ -24,10 +24,12 @@ class CryptoProService:
 
     def __init__(
             self,
-            data_provider: CryptoProviderInterface,
+            provider_factory: CryptoProviderFactory,
             config: Config
     ):
-        self.__data_provider = data_provider
+        self.__data_provider = provider_factory.get_provider(
+            config.provider_name
+        )
         self.__temp_path = config.temp_path
         self.__cert_store = config.storage_name
         self.__sign_store = config.sign_storage_name

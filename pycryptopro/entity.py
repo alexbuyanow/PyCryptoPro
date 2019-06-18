@@ -200,6 +200,7 @@ class Config:
     """
 
     DEFAULT = {
+        'provider_name': 'console',
         'cert_manager_path': '/opt/cprocsp/bin/amd64/certmgr',
         'cryptocp_path': '/opt/cprocsp/bin/amd64/cryptcp',
         'temp_path': '/tmp',
@@ -255,3 +256,10 @@ class Config:
         Gets signature storage PIN
         """
         return self.__config['sign_storage_pin']
+
+    @property
+    def provider_name(self) -> str:
+        """
+        Gets CryptoPro provider name
+        """
+        return self.__config['provider_name']
