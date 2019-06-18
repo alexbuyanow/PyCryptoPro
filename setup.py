@@ -7,5 +7,5 @@ setup(
     description='Python CryptoPro wrapper',
     author='Alexey Buyanov',
     author_email='alexbuyanow@gmail.com',
-    packages=['pycryptopro', 'pcryptopro.providers']
+    packages=['pycryptopro', 'pycryptopro.providers']
 )
