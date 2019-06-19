@@ -39,6 +39,9 @@ class CertFilter(CertFilterInterface):
     """
 
     def __init__(self, search: str = '', limit: int = 0, offset: int = 0):
+        limit = int(limit)
+        offset = int(offset)
+
         self.__search = list(set(search.split(' '))) if search else []
         self.__limit = limit if limit and limit > 0 else 0
         self.__offset = offset if offset and offset > 0 else 0
