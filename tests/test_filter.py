@@ -28,7 +28,7 @@ class TestCertFilter(unittest.TestCase):
         """
         cert_filter = CertFilter(value)
 
-        self.assertListEqual(sorted(output), sorted(cert_filter.search))
+        self.assertListEqual(sorted(output), sorted(cert_filter.search()))
 
     @parameterized.expand([
         (0, 0),
@@ -42,7 +42,7 @@ class TestCertFilter(unittest.TestCase):
         """
         cert_filter = CertFilter('', value)
 
-        self.assertEqual(output, cert_filter.limit)
+        self.assertEqual(output, cert_filter.limit())
 
     @parameterized.expand([
         (0, 0),
@@ -56,4 +56,4 @@ class TestCertFilter(unittest.TestCase):
         """
         cert_filter = CertFilter('', 0, value)
 
-        self.assertEqual(output, cert_filter.offset)
+        self.assertEqual(output, cert_filter.offset())

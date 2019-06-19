@@ -43,21 +43,18 @@ class CertFilter(CertFilterInterface):
         self.__limit = limit if limit and limit > 0 else 0
         self.__offset = offset if offset and offset > 0 else 0
 
-    @property
     def search(self) -> List[str]:
         """
         Gets substring for search in DN section
         """
         return self.__search
 
-    @property
     def limit(self) -> int:
         """
         Gets list records limit
         """
         return self.__limit
 
-    @property
     def offset(self) -> int:
         """
         Gets first record of list
