@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from .entity import Certificate, CRL, Config
 from .exception import ProviderNotFoundException
+from .filter import CertFilterInterface
 from .providers.console_provider import (
     ConsoleWrapper,
     CertManagerBuilder,
@@ -24,7 +25,11 @@ class CryptoProviderInterface(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def get_certificate_list(self, store: str) -> List[Certificate]:
+    def get_certificate_list(
+            self,
+            store: str,
+            list_filter: CertFilterInterface
+    ) -> Tuple[int, List[Certificate]]:
         """
         Gets certificates list
         """
@@ -52,7 +57,11 @@ class CryptoProviderInterface(metaclass=ABCMeta):
         """
 
     @abstractmethod
-    def get_crl_list(self, store: str) -> List[CRL]:
+    def get_crl_list(
+            self,
+            store: str,
+            list_filter: CertFilterInterface
+    ) -> Tuple[int, List[CRL]]:
         """
         Gets CRL list
         """
@@ -167,11 +176,19 @@ class ConsoleProvider(CryptoProviderInterface):
         self.__temp_dir = config.temp_path
         self.__wrapper = ConsoleWrapper()
 
-    def get_certificate_list(self, store: str) -> List[Certificate]:
+    def get_certificate_list(
+            self,
+            store: str,
+            list_filter: CertFilterInterface
+    ) -> Tuple[int, List[Certificate]]:
         """
         Gets certificates list
         """
-        return self.__get_list(store, CertManagerBuilder.TYPE_CERTIFICATE)
+        return self.__get_list(
+            store,
+            list_filter,
+            CertManagerBuilder.TYPE_CERTIFICATE
+        )
 
     def get_certificate(
             self,
@@ -195,11 +212,15 @@ class ConsoleProvider(CryptoProviderInterface):
         """
         self.__remove(cert_id, store, CertManagerBuilder.TYPE_CERTIFICATE)
 
-    def get_crl_list(self, store: str) -> List[CRL]:
+    def get_crl_list(
+            self,
+            store: str,
+            list_filter: CertFilterInterface
+    ) -> Tuple[int, List[CRL]]:
         """
         Gets CRL list
         """
-        return self.__get_list(store, CertManagerBuilder.TYPE_CRL)
+        return self.__get_list(store, list_filter, CertManagerBuilder.TYPE_CRL)
 
     def get_crl(self, cert_id: str, store: str) -> CRL:
         """
@@ -294,14 +315,56 @@ class ConsoleProvider(CryptoProviderInterface):
 
         self.__wrapper.execute(str(builder))
 
-    def __get_list(self, store: str, cert_type: str) -> List[Any]:
+    def __get_list(
+            self,
+            store: str,
+            list_filter: CertFilterInterface,
+            cert_type: str
+    ) -> Tuple[int, List[Any]]:
         """
         Gets list
         """
         builder = self.__get_cert_manager_builder()
         builder.list().store(store, False).type(cert_type)
 
-        return self.__parse_list(self.__wrapper.execute(str(builder)))
+        self.__filter_list(builder, list_filter)
+        items_list = self.__parse_list(self.__wrapper.execute(str(builder)))
+
+        return len(items_list), self.__limit_list(items_list, list_filter)
+
+    @classmethod
+    def __filter_list(
+            cls,
+            builder: CertManagerBuilder,
+            list_filter: CertFilterInterface
+    ):
+        """
+        Applies filter
+        """
+        if list_filter.search():
+            for search in list_filter.search():
+                builder.dn_filter(search)
+
+    @classmethod
+    def __limit_list(
+            cls,
+            items_list: List,
+            list_filter: CertFilterInterface
+    ) -> List[Any]:
+        """
+        Limits list with limit and offset
+        """
+        items_length = len(items_list)
+        start = list_filter.offset()
+
+        if start > items_length:
+            return []
+
+        finish = (start + list_filter.limit()) \
+            if list_filter.limit() else items_length
+        finish = finish if finish <= items_length else items_length
+
+        return items_list[start:finish]
 
     def ___get(
             self,

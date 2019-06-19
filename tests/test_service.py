@@ -52,25 +52,28 @@ class TestCryptoProServiceCerts(AbstractCryptoProServiceTest):
     CryptoPro service tests (work with cets and CRLs)
     """
 
+    @mock.patch('pycryptopro.service.CertFilterInterface')
     @mock.patch('pycryptopro.CryptoProviderInterface')
-    def test_get_certificate_list(self, provider):
+    def test_get_certificate_list(self, provider, list_filter):
         """
         Tests certificates list getting
         """
         data = self.__cert_fixtures()
-        provider.get_certificate_list.return_value = data
+        provider.get_certificate_list.return_value = (len(data), data)
         service = self._get_service(provider)
 
-        cert_list = service.get_certificate_list()
+        count, cert_list = service.get_certificate_list(list_filter)
 
+        self.assertEqual(3, count)
         self.assertEqual(3, len(cert_list))
         certificate = cert_list[0]
         self.assertIsInstance(certificate, Certificate)
         self.assertEqual(certificate, data[0])
         provider.get_certificate_list.assert_called_once()
 
+    @mock.patch('pycryptopro.service.CertFilterInterface')
     @mock.patch('pycryptopro.CryptoProviderInterface')
-    def test_get_certificate_list_error(self, provider):
+    def test_get_certificate_list_error(self, provider, list_filter):
         """
         Tests certificates list getting error
         """
@@ -84,7 +87,7 @@ class TestCryptoProServiceCerts(AbstractCryptoProServiceTest):
                 CryptoProException,
                 ''
         ):
-            service.get_certificate_list()
+            service.get_certificate_list(list_filter)
 
     @mock.patch('pycryptopro.CryptoProviderInterface')
     def test_get_certificate(self, provider):
@@ -187,25 +190,27 @@ class TestCryptoProServiceCerts(AbstractCryptoProServiceTest):
         ):
             service.remove_certificate('id')
 
+    @mock.patch('pycryptopro.service.CertFilterInterface')
     @mock.patch('pycryptopro.CryptoProviderInterface')
-    def test_get_crl_list(self, provider):
+    def test_get_crl_list(self, provider, list_filter):
         """
         Tests CRLs cert_list getting
         """
         data = self.__crl_fixtures()
-        provider.get_crl_list.return_value = data
+        provider.get_crl_list.return_value = (len(data), data)
         service = self._get_service(provider)
+        count, cert_list = service.get_crl_list(list_filter)
 
-        cert_list = service.get_crl_list()
-
+        self.assertEqual(3, count)
         self.assertEqual(3, len(cert_list))
         crl = cert_list[0]
         self.assertIsInstance(crl, CRL)
         self.assertEqual(crl, data[0])
         provider.get_crl_list.assert_called_once()
 
+    @mock.patch('pycryptopro.service.CertFilterInterface')
     @mock.patch('pycryptopro.CryptoProviderInterface')
-    def test_get_crl_list_error(self, provider):
+    def test_get_crl_list_error(self, provider, list_filter):
         """
         Tests CRLs list getting error
         """
@@ -219,7 +224,7 @@ class TestCryptoProServiceCerts(AbstractCryptoProServiceTest):
                 CryptoProException,
                 ''
         ):
-            service.get_crl_list()
+            service.get_crl_list(list_filter)
 
     @mock.patch('pycryptopro.CryptoProviderInterface')
     def test_get_crl(self, provider):

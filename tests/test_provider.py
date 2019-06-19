@@ -4,7 +4,6 @@
     CryptoPro providers test
 """
 
-from datetime import datetime
 from pathlib import Path
 import unittest2 as unittest
 import mock
@@ -13,7 +12,7 @@ from pycryptopro.provider import (
     ConsoleProvider,
     CryptoProviderFactory
 )
-from pycryptopro.entity import Certificate, CRL, Info, Config, DATE_FORMAT
+from pycryptopro.entity import Certificate, CRL, Info, Config
 from pycryptopro.exception import ProviderNotFoundException
 
 
@@ -60,9 +59,9 @@ class TestCryptoProviderFactory(unittest.TestCase):
         )
 
 
-class TestConsoleProvider(unittest.TestCase):
+class TestConsoleProviderCertManager(unittest.TestCase):
     """
-    Console provider tests
+    Console provider tests for cert manager
     """
 
     def setUp(self):
@@ -75,31 +74,87 @@ class TestConsoleProvider(unittest.TestCase):
         del self.__crl_fixture
         del self.__cert_fixture
 
+    @mock.patch('pycryptopro.provider.CertFilterInterface')
     @mock.patch('pycryptopro.provider.ConsoleWrapper')
-    def test_get_certificate_list(self, wrapper):
+    def test_get_certificate_list(self, wrapper, list_filter):
         """
         Tests certificate list getting
         """
         wrapper.return_value.execute.return_value = self.__cert_fixture
+        list_filter.limit.return_value = 0
+        list_filter.offset.return_value = 0
         provider = ConsoleProvider(Config())
 
-        result = provider.get_certificate_list('')
+        count, result = provider.get_certificate_list('', list_filter)
 
+        self.assertEqual(5, count)
         self.assertEqual(5, len(result))
         certificate = result[0]
-        self.__assert_cert(certificate)
+        self.__assert_cert(
+            certificate,
+            '5aac2b534b8d50306757bab8289886b755444e03'
+        )
         wrapper.return_value.execute.assert_called_once()
 
+    @mock.patch('pycryptopro.provider.CertFilterInterface')
     @mock.patch('pycryptopro.provider.ConsoleWrapper')
-    def test_get_certificate_list_empty(self, wrapper):
+    def test_get_certificate_list_filtered(self, wrapper, list_filter):
+        """
+        Tests certificate list getting
+        """
+        wrapper.return_value.execute.return_value = self.__cert_fixture
+        list_filter.search.return_value = 'search'
+        list_filter.limit.return_value = 0
+        list_filter.offset.return_value = 0
+        provider = ConsoleProvider(Config())
+
+        count, result = provider.get_certificate_list('', list_filter)
+
+        self.assertEqual(5, count)
+        self.assertEqual(5, len(result))
+        certificate = result[0]
+        self.__assert_cert(
+            certificate,
+            '5aac2b534b8d50306757bab8289886b755444e03'
+        )
+        wrapper.return_value.execute.assert_called_once()
+
+    @mock.patch('pycryptopro.provider.CertFilterInterface')
+    @mock.patch('pycryptopro.provider.ConsoleWrapper')
+    def test_get_certificate_list_limited(self, wrapper, list_filter):
+        """
+        Tests certificate list getting
+        """
+        wrapper.return_value.execute.return_value = self.__cert_fixture
+        list_filter.limit.return_value = 2
+        list_filter.offset.return_value = 2
+        provider = ConsoleProvider(Config())
+
+        count, result = provider.get_certificate_list('', list_filter)
+
+        self.assertEqual(5, count)
+        self.assertEqual(2, len(result))
+        certificate = result[0]
+        self.__assert_cert(
+            certificate,
+            '5ed7a78b451f46fae96b8959023f640f146ef1d7'
+        )
+        wrapper.return_value.execute.assert_called_once()
+
+    @mock.patch('pycryptopro.provider.CertFilterInterface')
+    @mock.patch('pycryptopro.provider.ConsoleWrapper')
+    def test_get_certificate_list_empty(self, wrapper, list_filter):
         """
         Tests empty certificate list getting
         """
         wrapper.return_value.execute.return_value = ''
+        list_filter.limit.return_value = 0
+        list_filter.offset.return_value = 0
         provider = ConsoleProvider(Config())
 
-        result = provider.get_certificate_list('')
+        count, result = provider.get_certificate_list('', list_filter)
 
+        self.assertEqual(0, count)
         self.assertEqual(0, len(result))
         wrapper.return_value.execute.assert_called_once()
 
@@ -113,7 +168,10 @@ class TestConsoleProvider(unittest.TestCase):
 
         certificate = provider.get_certificate('', '')
 
-        self.__assert_cert(certificate)
+        self.__assert_cert(
+            certificate,
+            '5aac2b534b8d50306757bab8289886b755444e03'
+        )
         wrapper.return_value.execute.assert_called_once()
 
     @mock.patch('pycryptopro.provider.ConsoleWrapper')
@@ -151,31 +209,87 @@ class TestConsoleProvider(unittest.TestCase):
         provider.remove_certificate('', '')
         wrapper.return_value.execute.assert_called_once()
 
+    @mock.patch('pycryptopro.provider.CertFilterInterface')
     @mock.patch('pycryptopro.provider.ConsoleWrapper')
-    def test_get_crl_list(self, wrapper):
+    def test_get_crl_list(self, wrapper, list_filter):
         """
         Tests CRL list getting
         """
         wrapper.return_value.execute.return_value = self.__crl_fixture
+        list_filter.limit.return_value = 0
+        list_filter.offset.return_value = 0
         provider = ConsoleProvider(Config())
 
-        result = provider.get_crl_list('')
+        count, result = provider.get_crl_list('', list_filter)
 
+        self.assertEqual(2, count)
         self.assertEqual(2, len(result))
         certificate = result[0]
-        self.__assert_crl(certificate)
+        self.__assert_crl(
+            certificate,
+            '5aac2b534b8d50306757bab8289886b755444e03'
+        )
         wrapper.return_value.execute.assert_called_once()
 
+    @mock.patch('pycryptopro.provider.CertFilterInterface')
     @mock.patch('pycryptopro.provider.ConsoleWrapper')
-    def test_get_crl_list_empty(self, wrapper):
+    def test_get_crl_list_filtered(self, wrapper, list_filter):
+        """
+        Tests CRL list getting
+        """
+        wrapper.return_value.execute.return_value = self.__crl_fixture
+        list_filter.search.return_value = 'search'
+        list_filter.limit.return_value = 0
+        list_filter.offset.return_value = 0
+        provider = ConsoleProvider(Config())
+
+        count, result = provider.get_crl_list('', list_filter)
+
+        self.assertEqual(2, count)
+        self.assertEqual(2, len(result))
+        certificate = result[0]
+        self.__assert_crl(
+            certificate,
+            '5aac2b534b8d50306757bab8289886b755444e03'
+        )
+        wrapper.return_value.execute.assert_called_once()
+
+    @mock.patch('pycryptopro.provider.CertFilterInterface')
+    @mock.patch('pycryptopro.provider.ConsoleWrapper')
+    def test_get_crl_list_limited(self, wrapper, list_filter):
+        """
+        Tests CRL list getting
+        """
+        wrapper.return_value.execute.return_value = self.__crl_fixture
+        list_filter.limit.return_value = 1
+        list_filter.offset.return_value = 1
+        provider = ConsoleProvider(Config())
+
+        count, result = provider.get_crl_list('', list_filter)
+
+        self.assertEqual(2, count)
+        self.assertEqual(1, len(result))
+        certificate = result[0]
+        self.__assert_crl(
+            certificate,
+            '511c2b534b8d50306757bab8289886b755444e03'
+        )
+        wrapper.return_value.execute.assert_called_once()
+
+    @mock.patch('pycryptopro.provider.CertFilterInterface')
+    @mock.patch('pycryptopro.provider.ConsoleWrapper')
+    def test_get_crl_list_empty(self, wrapper, list_filter):
         """
         Tests empty CRL list getting
         """
         wrapper.return_value.execute.return_value = ''
+        list_filter.limit.return_value = 0
+        list_filter.offset.return_value = 0
         provider = ConsoleProvider(Config())
 
-        result = provider.get_crl_list('')
+        count, result = provider.get_crl_list('', list_filter)
 
+        self.assertEqual(0, count)
         self.assertEqual(0, len(result))
         wrapper.return_value.execute.assert_called_once()
 
@@ -189,7 +303,10 @@ class TestConsoleProvider(unittest.TestCase):
 
         certificate = provider.get_crl('', '')
 
-        self.__assert_crl(certificate)
+        self.__assert_crl(
+            certificate,
+            '5aac2b534b8d50306757bab8289886b755444e03'
+        )
         wrapper.return_value.execute.assert_called_once()
 
     @mock.patch('pycryptopro.provider.ConsoleWrapper')
@@ -226,6 +343,35 @@ class TestConsoleProvider(unittest.TestCase):
 
         provider.remove_crl('', '')
         wrapper.return_value.execute.assert_called_once()
+
+    def __assert_cert(self, certificate: Certificate, check_id: str):
+        """
+        Checks certificate data
+        """
+        self.assertIsInstance(certificate, Certificate)
+        self.assertEqual(
+            check_id,
+            certificate.identifier
+        )
+        self.assertIsInstance(certificate.subject, Info)
+        self.assertIsInstance(certificate.subject, Info)
+
+    def __assert_crl(self, certificate: CRL, check_id: str):
+        """
+        Checks CRL data
+        """
+        self.assertIsInstance(certificate, CRL)
+        self.assertEqual(
+            check_id,
+            certificate.identifier
+        )
+        self.assertIsInstance(certificate.issuer, Info)
+
+
+class TestConsoleProviderCryptoCP(unittest.TestCase):
+    """
+    Console provider tests for cryptocp
+    """
 
     @classmethod
     @mock.patch('pycryptopro.provider.ConsoleWrapper')
@@ -274,50 +420,6 @@ class TestConsoleProvider(unittest.TestCase):
 
         provider.verify_detached(Path(), Path())
         wrapper.return_value.execute.assert_called_once()
-
-    def __assert_cert(self, certificate):
-        """
-        Checks certificate data
-        """
-        self.assertIsInstance(certificate, Certificate)
-        self.assertEqual(
-            '5aac2b534b8d50306757bab8289886b755444e03',
-            certificate.identifier
-        )
-        self.assertIsInstance(certificate.subject, Info)
-        self.assertIsInstance(certificate.subject, Info)
-        self.assertEqual(
-            datetime.strptime('01/12/2016  17:15:00 UTC', DATE_FORMAT),
-            certificate.valid_from
-        )
-        self.assertEqual(
-            datetime.strptime('01/12/2026  17:25:00 UTC', DATE_FORMAT),
-            certificate.valid_to
-        )
-        self.assertEqual('4DE522A4000300000815', certificate.serial)
-        self.assertEqual(
-            '19a2784dfc468bf50316c8d3c6646cd3be8b7da4',
-            certificate.thumbprint
-        )
-
-    def __assert_crl(self, certificate):
-        """
-        Checks CRL data
-        """
-        self.assertIsInstance(certificate, CRL)
-        self.assertEqual(
-            '5aac2b534b8d50306757bab8289886b755444e03',
-            certificate.identifier
-        )
-        self.assertIsInstance(certificate.issuer, Info)
-        self.assertEqual(
-            datetime.strptime('05/06/2019  13:50:00 UTC', DATE_FORMAT),
-            certificate.update
-        )
-        self.assertEqual(
-            datetime.strptime('06/06/2019  17:10:00 UTC', DATE_FORMAT),
-            certificate.next_update
-        )
 
 
 if __name__ == '__main__':

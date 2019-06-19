@@ -131,6 +131,12 @@ class CertManagerBuilder(AbstractBuilder):
 
         return self._set_arg(cert_type)
 
+    def dn_filter(self, search: str) -> CertManagerBuilder:
+        """
+        Sets "-dn" param
+        """
+        return self._set_arg('dn', search)
+
 
 class CryptoCpBuilder(AbstractBuilder):
     """

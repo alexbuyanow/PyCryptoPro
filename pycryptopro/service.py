@@ -7,13 +7,14 @@
 from __future__ import annotations
 from hashlib import md5
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from .entity import Certificate, CRL, Config
 from .exception import (
     CryptoProException,
     CryptoProviderException,
     ValidationFailedException
 )
+from .filter import CertFilterInterface
 from .provider import CryptoProviderFactory
 
 
@@ -35,12 +36,18 @@ class CryptoProService:
         self.__sign_store = config.sign_storage_name
         self.__pin = config.sign_storage_pin
 
-    def get_certificate_list(self) -> List[Certificate]:
+    def get_certificate_list(
+            self,
+            list_filter: CertFilterInterface
+    ) -> Tuple[int, List[Certificate]]:
         """
         Gets certificates list
         """
         try:
-            return self.__data_provider.get_certificate_list(self.__cert_store)
+            return self.__data_provider.get_certificate_list(
+                self.__cert_store,
+                list_filter
+            )
         except CryptoProviderException as exception:
             raise CryptoProException(exception.code, exception.message)
 
@@ -78,12 +85,18 @@ class CryptoProService:
         except CryptoProviderException as exception:
             raise CryptoProException(exception.code, exception.message)
 
-    def get_crl_list(self) -> List[CRL]:
+    def get_crl_list(
+            self,
+            list_filter: CertFilterInterface
+    ) -> Tuple[int, List[CRL]]:
         """
         Gets CRL list
         """
         try:
-            return self.__data_provider.get_crl_list(self.__cert_store)
+            return self.__data_provider.get_crl_list(
+                self.__cert_store,
+                list_filter
+            )
         except CryptoProviderException as exception:
             raise CryptoProException(exception.code, exception.message)
 
